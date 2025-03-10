@@ -3,9 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Parking;
-use App\Models\Reservation;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class ParkingController extends Controller
@@ -61,6 +59,27 @@ class ParkingController extends Controller
 
         } catch (\Throwable $th) {
 
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function destroy(Parking $parking)
+    {
+        try {
+            if (!$parking) {
+                return response()->json([
+                    "status" => false,
+                    "message" => "Parking not found"
+                ], 404);
+            }
+
+            $parking->delete();
+            
+            return response()->json($parking, 200);
+        } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
                 'message' => $th->getMessage(),

@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->datetime("from_date");
             $table->datetime("to_date");
-            $table->foreignId("user_id")->constrained("users");
-            $table->foreignId("parking_id")->constrained("parkings");
+            $table->foreignId("user_id")->constrained("users")->cascadeOnDelete();
+            $table->foreignId("parking_id")->constrained("parkings")->cascadeOnDelete();
             $table->timestamps();
         });
     }
