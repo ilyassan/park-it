@@ -8,6 +8,26 @@ use Illuminate\Support\Facades\Validator;
 
 class ParkingController extends Controller
 {
+
+    public function index(Request $request)
+    {
+        try {
+            $keyword = $request->get("keyword") ? "%" . $request->get("keyword") ."%": "";
+    
+            $parkings = Parking::where("name", "LIKE", $keyword)
+                               ->orWhere("price", "LIKE", $keyword)
+                               ->orWhere("limit", "LIKE", $keyword)
+                               ->get();
+    
+            return response()->json($parkings, 200);
+        } catch (\Throwable $th) {
+
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage(),
+            ], 500);
+        }
+    }
     
     public function store(Request $request)
     {
@@ -26,7 +46,7 @@ class ParkingController extends Controller
                 ], 401);
             }
     
-            $user = Parking::create([
+            Parking::create([
                 "name" => $request->name,
                 "price" => $request->price,
                 "limit" => $request->limit,
