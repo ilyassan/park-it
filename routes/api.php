@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ParkingController;
 use App\Http\Controllers\ReservationController;
 use Illuminate\Http\Request;
@@ -15,8 +16,9 @@ Route::put('/parkings/{parking}', [ParkingController::class, 'update'])->middlew
 Route::delete('/parkings/{parking}', [ParkingController::class, 'destroy'])->middleware("auth:sanctum");
 
 Route::delete('/reservations/{reservation}', [ReservationController::class, 'destroy'])->middleware("auth:sanctum");
-
 Route::get('/my-reservations', [ReservationController::class, 'myReservations'])->middleware("auth:sanctum");
+
+Route::get('/statistics', [DashboardController::class, 'index'])->middleware("auth:sanctum");
 
 Route::get('/user', function (Request $request) {
     return $request->user();
