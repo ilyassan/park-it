@@ -67,32 +67,4 @@ class ParkingController extends Controller
             ], 500);
         }
     }
-
-    public function destroy(Reservation $reservation)
-    {
-        try {
-            if (!$reservation) {
-                return response()->json([
-                    "status" => false,
-                    "message" => "Reservation not found"
-                ], 200);
-            }
-    
-            if ($reservation->user_id != Auth::id()) {
-                return response()->json([
-                    "status" => false,
-                    "message" => "Unauthorized"
-                ], 401);
-            }
-    
-            $reservation->delete();
-            
-            return response()->json($reservation, 200);
-        } catch (\Throwable $th) {
-            return response()->json([
-                'status' => false,
-                'message' => $th->getMessage(),
-            ], 500);
-        }
-    }
 }
