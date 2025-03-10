@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Parking;
+use App\Models\Reservation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class ParkingController extends Controller
@@ -59,6 +61,34 @@ class ParkingController extends Controller
 
         } catch (\Throwable $th) {
 
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function destroy(Reservation $reservation)
+    {
+        try {
+            if (!$reservation) {
+                return response()->json([
+                    "status" => false,
+                    "message" => "Reservation not found"
+                ], 200);
+            }
+    
+            if ($reservation->user_id != Auth::id()) {
+                return response()->json([
+                    "status" => false,
+                    "message" => "Unauthorized"
+                ], 401);
+            }
+    
+            $reservation->delete();
+            
+            return response()->json($reservation, 200);
+        } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
                 'message' => $th->getMessage(),
