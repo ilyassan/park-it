@@ -10,6 +10,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
@@ -38,6 +39,13 @@ class User extends Authenticatable
     {
         return $this->role_id == RoleEnum::CLIENT;
     }
+
+    // Relationships
+    public function reservations(): HasMany
+    {
+        return $this->hasMany(Reservation::class, 'user_id');
+    }
+
 
     // Local Scopes
     public function scopeClients(Builder $query): void
