@@ -30,7 +30,7 @@ class ReservationController extends Controller
                 return response()->json([
                     "status" => false,
                     "message" => "Reservation not found"
-                ], 200);
+                ], 404);
             }
     
             if ($reservation->user_id != Auth::id()) {

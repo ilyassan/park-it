@@ -11,6 +11,7 @@ Route::post('/auth/login', [AuthController::class, 'login']);
 
 Route::get('/parkings', [ParkingController::class, 'index'])->middleware("auth:sanctum");
 Route::post('/parkings/create', [ParkingController::class, 'store'])->middleware("auth:sanctum");
+Route::delete('/parkings/{parking}', [ParkingController::class, 'destroy'])->middleware("auth:sanctum");
 
 Route::delete('/reservations/{reservation}', [ReservationController::class, 'destroy'])->middleware("auth:sanctum");
 
