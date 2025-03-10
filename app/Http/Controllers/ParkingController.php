@@ -29,6 +29,50 @@ class ParkingController extends Controller
         }
     }
     
+    public function update(Parking $parking, Request $request)
+    {
+        try {
+            if (!$parking) {
+                return response()->json([
+                    "status" => false,
+                    "message" => "Parking not found"
+                ], 404);
+            }
+
+            $validated = Validator::make($request->all(), [
+                "name" => "required",
+                "price" => "required|integer",
+                "limit" => "required|integer",
+            ]);
+    
+            if ($validated->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'validation error',
+                    'errors' => $validated->errors(),
+                ], 401);
+            }
+    
+            $parking->name = $request->name;
+            $parking->price = $request->price;
+            $parking->limit = $request->limit;
+
+            $parking->save();
+    
+            return response()->json([
+                'status' => true,
+                'message' => "Parking Updated Successfully",
+            ], 200);
+
+        } catch (\Throwable $th) {
+
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage(),
+            ], 500);
+        }
+    }
+    
     public function store(Request $request)
     {
         try {
