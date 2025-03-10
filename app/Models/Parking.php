@@ -15,4 +15,11 @@ class Parking extends Model
         'price',
         'limit',
     ];
+
+
+    // Relationships
+    public function reservations()
+    {
+        return $this->hasMany(Reservation::class, 'parking_id');
+    }
 }
