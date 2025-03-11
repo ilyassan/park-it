@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreParkingRequest;
+use App\Http\Requests\UpdateParkingRequest;
 use App\Models\Parking;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -29,7 +31,7 @@ class ParkingController extends Controller
         }
     }
     
-    public function update(Parking $parking, Request $request)
+    public function update(Parking $parking, UpdateParkingRequest $request)
     {
         try {
             if (!$parking) {
@@ -73,23 +75,9 @@ class ParkingController extends Controller
         }
     }
     
-    public function store(Request $request)
+    public function store(StoreParkingRequest $request)
     {
         try {
-            $validated = Validator::make($request->all(), [
-                "name" => "required",
-                "price" => "required|integer",
-                "limit" => "required|integer",
-            ]);
-    
-            if ($validated->fails()) {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'validation error',
-                    'errors' => $validated->errors(),
-                ], 401);
-            }
-    
             Parking::create([
                 "name" => $request->name,
                 "price" => $request->price,
