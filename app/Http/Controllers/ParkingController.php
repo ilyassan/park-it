@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreParkingRequest;
 use App\Http\Requests\UpdateParkingRequest;
 use App\Models\Parking;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -14,7 +15,7 @@ class ParkingController extends Controller
     public function index(Request $request)
     {
         try {
-            $keyword = $request->get("keyword") ? "%" . $request->get("keyword") ."%": "";
+            $keyword = $request->get("keyword") ? "%" . $request->get("keyword") ."%": "%";
     
             $parkings = Parking::where("name", "LIKE", $keyword)
                                ->orWhere("price", "LIKE", $keyword)
@@ -98,19 +99,26 @@ class ParkingController extends Controller
         }
     }
 
-    public function destroy(Parking $parking)
+    public function destroy($id)
     {
         try {
-            if (!$parking) {
-                return response()->json([
-                    "status" => false,
-                    "message" => "Parking not found"
-                ], 404);
-            }
-
+            // Find the parking by ID
+            $parking = Parking::findOrFail($id);
+    
+            // Delete the parking
             $parking->delete();
-            
-            return response()->json($parking, 200);
+    
+            return response()->json([
+                'status' => true,
+                'message' => 'Parking deleted successfully',
+                'data' => $parking,
+            ], 200);
+        } catch (ModelNotFoundException $e) {
+            // Handle the case where the parking is not found
+            return response()->json([
+                'status' => false,
+                'message' => 'Parking not found',
+            ], 404);
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
