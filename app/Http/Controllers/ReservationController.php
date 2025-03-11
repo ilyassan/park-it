@@ -23,6 +23,7 @@ class ReservationController extends Controller
 
             // check if available
             $overlappingReservationsCount = $parking->reservations()
+                                                        ->where('status', 'pending')
                                                         ->where('from_date', '<', $request->to_date)
                                                         ->where('to_date', '>', $request->from_date)
                                                         ->count();
@@ -64,7 +65,7 @@ class ReservationController extends Controller
         }
     }
 
-    public function destroy(Reservation $reservation)
+    public function cancel(Reservation $reservation)
     {
         try {
             if (!$reservation) {
@@ -81,7 +82,8 @@ class ReservationController extends Controller
                 ], 401);
             }
     
-            $reservation->delete();
+            $reservation->status = "canceled";
+            $reservation->save();
             
             return response()->json($reservation, 200);
         } catch (\Throwable $th) {
