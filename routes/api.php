@@ -17,16 +17,17 @@ Route::middleware("auth:sanctum")->group(function(){
     
     // Admin routes
     Route::middleware("admin")->group(function(){
-        Route::get('/parkings', [ParkingController::class, 'index']);
         Route::post('/parkings/create', [ParkingController::class, 'store']);
         Route::put('/parkings/{parking}', [ParkingController::class, 'update']);
-        Route::delete('/parkings/{parking}', [ParkingController::class, 'destroy']);
+        Route::delete('/parkings/{id}', [ParkingController::class, 'destroy']);
 
         Route::get('/statistics', [DashboardController::class, 'index']);
     });
     
     // Client Routes
     Route::middleware("client")->group(function(){
+        Route::get('/parkings', [ParkingController::class, 'index']);
+
         Route::post('/reservations/create', [ReservationController::class, 'store']);
         Route::delete('/reservations/{reservation}', [ReservationController::class, 'cancel']);
         Route::put('/reservations/{reservation}', [ReservationController::class, 'update']);
