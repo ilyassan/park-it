@@ -33,6 +33,8 @@ Route::middleware("auth:sanctum")->group(function(){
         Route::put('/reservations/{reservation}', [ReservationController::class, 'update']);
         Route::get('/my-reservations', [ReservationController::class, 'myReservations']);
     });
+
+    Route::post("/auth/logout", [AuthController::class, "logout"]);
 });
 
 Route::get('/user', function (Request $request) {
