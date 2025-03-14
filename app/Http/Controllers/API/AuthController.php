@@ -149,4 +149,40 @@ class AuthController extends Controller
             ], 500);
         }
     }
+
+    /**
+     * @OA\Post(
+     *     path="/api/logout",
+     *     summary="User Logout",
+     *     description="Logs out a user",
+     *     operationId="logout",
+     *     tags={"Auth"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Logout successful",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="User logged out successfully")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthenticated",
+     *     )
+     * )
+     */
+    public function logout(Request $request){
+        try {
+            $request->user()->currentAccessToken()->delete();
+
+            return response()->json([
+                'message' => 'User logged out successfully',
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage(),
+            ], 500);
+        }
+    }
 }
