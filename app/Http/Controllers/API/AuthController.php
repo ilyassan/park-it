@@ -14,7 +14,7 @@ class AuthController extends Controller
 {
     /**
      * @OA\Post(
-     *     path="/api/signup",
+     *     path="/api/auth/signup",
      *     summary="User Signup",
      *     description="Registers a new user",
      *     operationId="signup",
@@ -83,7 +83,7 @@ class AuthController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/login",
+     *     path="/api/auth/login",
      *     summary="User Login",
      *     description="Logs in a user and returns a token",
      *     operationId="login",
@@ -152,7 +152,7 @@ class AuthController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/logout",
+     *     path="/api/auth/logout",
      *     summary="User Logout",
      *     description="Logs out a user",
      *     operationId="logout",
